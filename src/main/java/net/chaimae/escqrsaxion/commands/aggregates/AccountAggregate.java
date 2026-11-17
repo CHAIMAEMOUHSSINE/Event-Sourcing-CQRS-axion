@@ -23,6 +23,7 @@ public class AccountAggregate {
     public AccountAggregate() {}
 
     @CommandHandler
+    // fct d'activation de l'aggregate, elle est appelée lors de la réception d'un AddAccountCommand
     public AccountAggregate(AddAccountCommand command) {
         log.info("########################### Add Account   command received ##########################");
         if(command.getInitialBalance() < 0) throw new IllegalArgumentException("Initial balance cannot be negative");
@@ -34,8 +35,9 @@ public class AccountAggregate {
         ));
     }
     @EventSourcingHandler
+    // fct d'evolution de l'aggregate, elle est appelée lors de la réception d'un AccountCreatedEvent
     public void on(AccountCreatedEvent event) {
-        log.info("########################### Account Created Event received ##########################");
+        log.info("########################### Account Created Event occured ##########################");
         this.accountId = event.getAccountId();
         this.balance = event.getInitialBalance();
         this.status = event.getStatus();
