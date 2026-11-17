@@ -2,6 +2,7 @@ package net.chaimae.escqrsaxion.commands.commands;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.chaimae.escqrsaxion.enums.AccountStatus;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Getter @AllArgsConstructor
