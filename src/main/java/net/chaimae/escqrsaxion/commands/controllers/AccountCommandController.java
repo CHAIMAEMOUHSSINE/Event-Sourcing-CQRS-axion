@@ -1,4 +1,8 @@
 package net.chaimae.escqrsaxion.commands.controllers;
 
-public class AccuntCommandController {
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+@RequestMapping()
+public class AccountCommandController {
 }
