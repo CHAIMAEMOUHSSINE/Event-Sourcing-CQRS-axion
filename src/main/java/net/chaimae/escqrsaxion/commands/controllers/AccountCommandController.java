@@ -60,26 +60,23 @@ public class AccountCommandController {
         return result;
     }
 
-    @PutMapping("/updateStatus")
-    public CompletableFuture<String> updateAccountStatus(@RequestBody UpdateAccountStatusRequestDTO request){
-        CompletableFuture<String> result = this.commandGateway.send(new UpdateAccountStatusCommand(
-                request.accountId(),
-                request.status()
-        ));
-        return result;
+//    @PutMapping("/updateStatus")
+//    public CompletableFuture<String> updateAccountStatus(@RequestBody UpdateAccountStatusRequestDTO request){
+//        CompletableFuture<String> result = this.commandGateway.send(new UpdateAccountStatusCommand(
+//                request.accountId(),
+//                request.status()
+//        ));
+//        return result;
 
     }
 
-    @ExceptionHandler(Exception.class)
-    public String exceptionHandler(Exception ex) {
-        return ex.getMessage();
-    }
-
-    @GetMapping("/events/{accountId}")
-    public Stream eventStore(@PathVariable String accountId) {
-        return eventStore.readEvents(accountId).asStream();
-    }
-}
+//    @ExceptionHandler(Exception.class)
+//    public String exceptionHandler(Exception ex) {
+//        return ex.getMessage();
+//    }
 
 
-}
+
+
+
+
