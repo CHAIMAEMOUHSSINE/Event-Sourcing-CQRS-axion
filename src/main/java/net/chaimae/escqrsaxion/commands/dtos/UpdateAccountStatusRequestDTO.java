@@ -1,4 +1,6 @@
 package net.chaimae.escqrsaxion.commands.dtos;
 
-public class UpdateAccountStatusRequestDTO {
+import net.chaimae.escqrsaxion.enums.AccountStatus;
+
+public record UpdateAccountStatusRequestDTO(String accountId, AccountStatus status) {
 }

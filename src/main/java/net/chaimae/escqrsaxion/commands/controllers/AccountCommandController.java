@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("commands/accounts")
@@ -29,7 +30,7 @@ public class AccountCommandController {
     }
 
     @PostMapping("/add")
-    public String addNewAccount(@RequestBody AddNewAccountRequestDTO request){
+    public String addNewAccount(@RequestBody AddNewAccountRequestDTO request) {
         CompletableFuture<String> response = commandGateway.send(new AddAccountCommand(
                 UUID.randomUUID().toString(),
                 request.initialBalance(),
@@ -41,7 +42,7 @@ public class AccountCommandController {
 
 
     @PostMapping("/credit")
-    public CompletableFuture<String> creditAccount(@RequestBody CreditAccountRequestDTO request){
+    public CompletableFuture<String> creditAccount(@RequestBody CreditAccountRequestDTO request) {
         CompletableFuture<String> result = this.commandGateway.send(new CreditAccountCommand(
                 request.accountId(),
                 request.amount(),
@@ -51,7 +52,7 @@ public class AccountCommandController {
     }
 
     @PostMapping("/debit")
-    public CompletableFuture<String> debitAccount(@RequestBody DebitAccountRequestDTO request){
+    public CompletableFuture<String> debitAccount(@RequestBody DebitAccountRequestDTO request) {
         CompletableFuture<String> result = this.commandGateway.send(new DebitAccountCommand(
                 request.accountId(),
                 request.amount(),
@@ -60,20 +61,28 @@ public class AccountCommandController {
         return result;
     }
 
-//    @PutMapping("/updateStatus")
-//    public CompletableFuture<String> updateAccountStatus(@RequestBody UpdateAccountStatusRequestDTO request){
-//        CompletableFuture<String> result = this.commandGateway.send(new UpdateAccountStatusCommand(
-//                request.accountId(),
-//                request.status()
-//        ));
-//        return result;
+    @GetMapping("/events/{accountId}")
+    public Stream eventStore(@PathVariable String accountId) {
+        return eventStore.readEvents(accountId).asStream();
+    }
+    @PutMapping("/updateStatus")
+    public CompletableFuture<String> updateAccountStatus(@RequestBody UpdateAccountStatusRequestDTO request){
+        CompletableFuture<String> result = this.commandGateway.send(new UpdateAccountStatusCommand(
+                request.accountId(),
+                request.status()
+        ));
+        return result;
 
     }
+    @ExceptionHandler(Exception.class)
+    public String exceptionHandler(Exception ex) {
+        return ex.getMessage();
+    }
+}
 
-//    @ExceptionHandler(Exception.class)
-//    public String exceptionHandler(Exception ex) {
-//        return ex.getMessage();
-//    }
+
+
+
 
 
 
