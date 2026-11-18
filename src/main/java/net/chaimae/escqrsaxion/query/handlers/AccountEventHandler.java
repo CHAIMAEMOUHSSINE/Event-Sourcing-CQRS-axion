@@ -2,15 +2,17 @@ package net.chaimae.escqrsaxion.query.handlers;
 import jdk.dynalink.Operation;
 import lombok.extern.slf4j.Slf4j;
 
-import net.chaimae.escqrsaxion.query.entities.Operation;
-import net.chaimae.escqrsaxion.events.AccountActivatedEvent;
-import net.chaimae.escqrsaxion.events.AccountCreatedEvent;
+
+import net.chaimae.escqrsaxion.enums.OperationType;
+import net.chaimae.escqrsaxion.events.*;
 import net.chaimae.escqrsaxion.query.entities.Account;
+import net.chaimae.escqrsaxion.query.repository.AccountRepository;
+import net.chaimae.escqrsaxion.query.repository.OperationRepository;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.eventhandling.EventMessage;
 import org.axonframework.queryhandling.QueryUpdateEmitter;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
 
 @Component
 @Slf4j

@@ -3,6 +3,11 @@ package net.chaimae.escqrsaxion.query.handlers;
 import net.chaimae.escqrsaxion.query.dtos.AccountStatementResponseDTO;
 import net.chaimae.escqrsaxion.query.entities.Account;
 import net.chaimae.escqrsaxion.query.entities.Operation;
+import net.chaimae.escqrsaxion.query.queries.GetAccountStatementQuery;
+import net.chaimae.escqrsaxion.query.queries.GetAllAccountsQuery;
+import net.chaimae.escqrsaxion.query.queries.WatchEventQuery;
+import net.chaimae.escqrsaxion.query.repository.AccountRepository;
+import net.chaimae.escqrsaxion.query.repository.OperationRepository;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Component;
 

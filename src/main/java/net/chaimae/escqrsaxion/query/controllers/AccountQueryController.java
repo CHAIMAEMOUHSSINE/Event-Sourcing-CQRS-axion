@@ -1,0 +1,55 @@
+package net.chaimae.escqrsaxion.query.controllers;
+
+import net.chaimae.escqrsaxion.query.dtos.AccountStatementResponseDTO;
+import net.chaimae.escqrsaxion.query.entities.Account;
+import net.chaimae.escqrsaxion.query.entities.Operation;
+import net.chaimae.escqrsaxion.query.queries.GetAccountStatementQuery;
+import net.chaimae.escqrsaxion.query.queries.GetAllAccountsQuery;
+import net.chaimae.escqrsaxion.query.queries.WatchEventQuery;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
+import org.axonframework.queryhandling.QueryGateway;
+import org.axonframework.queryhandling.SubscriptionQueryResult;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+@RestController
+@RequestMapping("/query/accounts")
+public class AccountQueryController {
+    private QueryGateway queryGateway;
+
+    public AccountQueryController(QueryGateway queryGateway) {
+        this.queryGateway = queryGateway;
+    }
+
+    @GetMapping("/all")
+    public CompletableFuture<List<Account>> getAllAccounts(){
+        CompletableFuture<List<Account>> result = queryGateway.query(
+                new GetAllAccountsQuery(),
+                ResponseTypes.multipleInstancesOf(Account.class));
+        return result;
+    }
+
+    @GetMapping("/accountStatement/{accountId}")
+    public CompletableFuture<AccountStatementResponseDTO> getAccountStatement(@PathVariable String accountId){
+        return queryGateway.query(new GetAccountStatementQuery(accountId),ResponseTypes.instanceOf(AccountStatementResponseDTO.class));
+    }
+
+    @GetMapping(value = "/watch/{accountId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Operation> watch(@PathVariable String accountId){
+        SubscriptionQueryResult<Operation, Operation> result =
+                queryGateway.subscriptionQuery(new WatchEventQuery(accountId),
+                        ResponseTypes.instanceOf(Operation.class),
+                        ResponseTypes.instanceOf(Operation.class)
+                );
+        return result.initialResult().concatWith(result.updates());
+    }
+
+
+}
