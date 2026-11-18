@@ -29,7 +29,7 @@ public class AccountQueryHandler {
 
     @QueryHandler
     public AccountStatementResponseDTO on(GetAccountStatementQuery query){
-        Account account = accountRepository.findById(query.getAccountId()).get();
+        Account account = accountRepository.findById(query.getAccountId()).orElse(null);
         List<Operation> operations = operationRepository.findByAccountId(query.getAccountId());
         return new AccountStatementResponseDTO(account, operations);
     }
